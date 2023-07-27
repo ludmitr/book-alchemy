@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Library App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to My Library</h1>
+        <div class="book-list">
+            {% for book in books %}
+                <div class="book-item">
+                    <h2>{{ book.title }}</h2>
+                    <p>By {{ book.author.name }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
