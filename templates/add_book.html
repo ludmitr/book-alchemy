@@ -3,44 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='add_book.css')}}">
-    <title>Add Book</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='add_book.css') }}">
+    <title>Movie Search</title>
 </head>
 <body>
-    <div class="container">
-        <form id="addBookForm" action="{{ url_for('add_book') }}" method="POST">
-            <h2>Add Book</h2>
-            <div class="form-group">
-                <label for="title">Title:</label>
-                <input type="text" id="title" name="title" required>
-            </div>
-            <div class="form-group">
-                <label for="author">Author:</label>
-                <select id="author" name="author" required>
-                    <option value="" selected disabled>Choose Author</option>
-                    {% for author in authors %}
-                        <option value="{{ author.id }}">{{ author }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="isbn">ISBN:</label>
-                <input type="text" id="isbn" name="isbn" required>
-            </div>
-            <div class="form-group">
-                <label for="publication_year">Publication Year:</label>
-                <input type="number" id="publication_year" name="publication_year" min="1800" max="2099" required>
-            </div>
-            <div class="form-group">
-                <button type="submit">Add Book</button>
-            </div>
+    <div class="search-container">
+        <h1>Movie Search</h1>
+        <form id="searchMovieForm" data-url="{{ url_for('search_book') }}">
+            <input type="text" id="search" name="search" placeholder="Enter movie title" required>
+            <button type="submit">Search</button>
         </form>
     </div>
 
-    <!-- Pop-up message containers -->
-    <div id="message-container">
-        <div id="success-message" class="message success"></div>
-        <div id="error-message" class="message error"></div>
+    <div class="results-container" id="resultsContainer">
+        <!-- Search results will be displayed here -->
     </div>
 
     <script src="{{ url_for('static', filename='add_book.js') }}"></script>

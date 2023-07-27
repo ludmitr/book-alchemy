@@ -22,7 +22,8 @@ def search_for_book_by_name(book_name: str):
         books = res.json()['results']
         result = [{'title': book['title'],
                    'isbn': book['canonical_isbn'],
-                   'author': book['authors'][0]}
+                   'author': book['authors'][0],
+                   'publication_year': book['published_works'][-1]['copyright']}
                   for book in books]
         return result
 

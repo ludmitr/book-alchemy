@@ -1,9 +1,11 @@
-from flask import Flask, request, url_for, render_template, jsonify
+from flask import Flask, request, url_for, render_template, jsonify, abort
 from flask_sqlalchemy import SQLAlchemy
 from my_app import app, db
 from my_app.data_models import Author, Book
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
+from api_data_handler.book_data_fetcher import search_for_book_by_name
+from werkzeug.exceptions import HTTPException
 
 
 @app.route('/')
@@ -39,6 +41,7 @@ def add_author():
 
         # Return a success message
         return jsonify({"message": "Author added successfully"}), 201
+
 
 @app.route('/add_book', methods=['GET', 'POST'])
 def add_book():
@@ -80,3 +83,27 @@ def add_book():
         return jsonify({"error": f"An unexpected error occurred - {e}"}), 500
 
 
+@app.route('/search_book')
+def search_book():
+    book_name_to_search = request.args.get('search', default="", type=str)
+    search_result = search_for_book_by_name(book_name_to_search)
+    if 'error' in search_result:
+        if search_result['error'] == "We're having trouble reaching the book database. Please try again later.":
+            abort(503, description=search_result['error'])
+        elif search_result['error'] == "We received an unexpected response while trying to find your book. Please try again later." or search_result['error'] == "An unexpected error occurred. Please try again later.":
+            abort(500, description=search_result['error'])
+
+    # adding default url image to each book
+    default_image_url = url_for('static', filename='images/default.png')
+    search_result = [{**book, 'default_image_url': default_image_url} for book
+                     in search_result]
+
+    return jsonify(search_result)
+
+
+@app.errorhandler(HTTPException)
+def handle_exception(e):
+    response = e.get_response()
+    response.data = jsonify({"code": e.code, "name": e.name, "description": e.description})
+    response.content_type = "application/json"
+    return response
