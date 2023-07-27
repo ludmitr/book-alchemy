@@ -3,11 +3,13 @@ from flask_sqlalchemy import SQLAlchemy
 from my_app import app, db
 from my_app.data_models import Author, Book
 from datetime import datetime
+from sqlalchemy.exc import IntegrityError
 
 
 @app.route('/')
 def home():
-    return 'HeLLO BLIAT'
+    all_books = db.session.query(Book).join(Book.author)
+    return render_template('home.html', books=all_books)
 
 @app.route('/add_author', methods=['GET','POST'])
 def add_author():
@@ -37,3 +39,44 @@ def add_author():
 
         # Return a success message
         return jsonify({"message": "Author added successfully"}), 201
+
+@app.route('/add_book', methods=['GET', 'POST'])
+def add_book():
+    """Handling GET and POST request
+        GET - render a page with add book FORM.
+        POST - Getting arguments and adding the book to the db.
+    """
+    try:
+        if request.method == 'GET':
+            all_authors = db.session.query(Author).all()
+            return render_template('add_book.html', authors=all_authors)
+
+        elif request.method == 'POST':
+            # getting arguments from add book form
+            title = request.form.get('title')
+            author_id = request.form.get('author')
+            isbn = request.form.get('isbn')
+            publication_year = request.form.get('publication_year')  # Correct the form field name
+
+            # Data validation
+            if not title or not author_id or not publication_year or not isbn:
+                return jsonify({"error": "All fields are required"}), 400
+            if not publication_year.isnumeric():
+                return jsonify({"error": "Invalid publication year"}), 400
+
+            # Create a new book and add it to the database
+            new_book = Book(isbn=isbn, title=title, publication_year=int(publication_year), author_id=author_id)
+            db.session.add(new_book)
+            db.session.commit()
+
+            # Return a success message
+            return jsonify({"message": "Book added successfully"}), 201
+
+    except IntegrityError:
+        db.session.rollback()
+        return jsonify({"error": "Book with this ISBN already exists"}), 400
+
+    except Exception as e:
+        return jsonify({"error": f"An unexpected error occurred - {e}"}), 500
+
+
