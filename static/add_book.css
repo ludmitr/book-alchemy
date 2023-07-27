@@ -1,0 +1,157 @@
+:root {
+    --primary-color: #4CAF50;
+    --primary-color-hover: #45a049;
+    --text-size: 16px;
+    --border-style: 1px solid #ccc;
+    --border-radius: 4px;
+}
+
+body {
+    font-family: Arial, sans-serif, 'Trebuchet MS'; /* fallback font added */
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+input,
+button {
+    width: 100%;
+    padding: 10px;
+    font-size: var(--text-size);
+    border-radius: var(--border-radius);
+}
+
+input {
+    border: var(--border-style);
+}
+
+input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+button {
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background-color: var(--primary-color-hover);
+}
+input {
+    box-sizing: border-box; /* add this */
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+
+/* --------------------------------------------------------------- */
+
+/* Add new styles for message container */
+#message-container {
+    position: fixed;
+    top: 50px; /* Adjust the value to move the messages higher or lower */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.message {
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    width: 300px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    opacity: 0; /* Hide the messages by default */
+    transform: translateY(-10px); /* Move messages slightly upward */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Styles for success message */
+.success {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+/* Styles for error message */
+.error {
+    background-color: #f44336;
+    color: #fff;
+}
+
+/* Show the messages when they have content */
+.message:not(:empty) {
+    opacity: 1;
+    transform: translateY(0);
+}
+/* --------------------------------------------------------------- */
+/* Styles for the select dropdown */
+select {
+    width: 100%;
+    padding: 10px;
+    font-size: var(--text-size);
+    border: var(--border-style);
+    border-radius: var(--border-radius);
+    background-color: #fff;
+    appearance: none; /* Remove default arrow icon on some browsers */
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); /* Custom arrow icon */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+
+select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+/* Hide default dropdown arrow icon on Safari */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    select {
+        background-image: none;
+    }
+}
