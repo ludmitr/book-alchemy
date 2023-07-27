@@ -1,93 +1,78 @@
-:root {
-    --primary-color: #1a202c;
-    --secondary-color: #2d3748;
-    --text-color: #f7fafc;
-    --primary-btn-color: #2d3748;
-    --primary-btn-hover-color: #1a202c;
-}
-
 body {
-    font-family: Arial, sans-serif;
-    background-color: var(--primary-color);
-    color: var(--text-color);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    background-color: #fff;
     margin: 0;
     padding: 0;
 }
 
 .search-container {
-    padding: 2em;
-    text-align: center;
-}
-
-.search-container h1 {
-    font-size: 2em;
-    margin-bottom: 1em;
-}
-
-#searchMovieForm {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 2em;
-}
-
-#searchMovieForm input[type="text"] {
-    flex: 1 1 auto;
-    padding: 0.5em;
-    border: none;
-    border-radius: 4px 0 0 4px;
-    font-size: 1em;
-}
-
-#searchMovieForm button {
-    padding: 0.5em 1em;
-    border: none;
-    border-radius: 0 4px 4px 0;
-    background-color: var(--primary-btn-color);
-    color: var(--text-color);
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-#searchMovieForm button:hover {
-    background-color: var(--primary-btn-hover-color);
-}
-
-.results-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 1em;
-    background-color: var(--secondary-color);
-    border-radius: 4px;
-}
-
-
-/* movie represent*/
-.movie {
-    background-color: #4a5568;
-    color: #f7fafc;
-    margin: 1em;
-    padding: 1em;
-    border-radius: 4px;
-    display: flex;
-}
-
-.movie-image {
-    max-width: 200px;
-    margin-right: 20px;
-    object-fit: cover;
-}
-
-.movie-details {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+    padding: 20px;
 }
 
-.movie h2 {
-    margin: 0 0 0.5em 0;
-    color: #edf2f7;
+.search-container form {
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
 }
 
-.movie p {
-    margin: 0.5em 0;
+.search-container input,
+.search-container button {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+}
+
+.search-container input {
+    box-sizing: border-box;
+}
+
+.search-container button {
+    cursor: pointer;
+    background-color: #007BFF;
+    border: none;
+    color: white;
+    font-weight: bold;
+}
+
+.results-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    padding: 20px;
+}
+
+.book {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    background-color: #fff;
+}
+
+.book-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.book-details {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.error-message {
+    text-align: center;
+    color: red;
+    font-size: 1.2em;
+    margin: 20px;
 }

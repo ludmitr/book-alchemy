@@ -14,6 +14,11 @@ document.getElementById('searchMovieForm').addEventListener('submit', function(e
             let resultsContainer = document.getElementById('resultsContainer');
             resultsContainer.innerHTML = '';
 
+            if (data.length === 0) {
+                resultsContainer.innerHTML = '<p class="error-message">We couldn\'t find any books matching your search. Please try again with a different title.</p>';
+                return;
+            }
+
             data.forEach(book => {
                 let bookDiv = document.createElement('div');
                 bookDiv.classList.add('book');

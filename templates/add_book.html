@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='add_book.css') }}">
-    <title>Movie Search</title>
+    <title>Book Search</title>
 </head>
 <body>
     <div class="search-container">
-        <h1>Movie Search</h1>
         <form id="searchMovieForm" data-url="{{ url_for('search_book') }}">
-            <input type="text" id="search" name="search" placeholder="Enter movie title" required>
-            <button type="submit">Search</button>
+            <input type="text" id="search" name="search" placeholder="Enter book title..." required>
+            <button type="submit">Search for Book</button>
         </form>
     </div>
 
