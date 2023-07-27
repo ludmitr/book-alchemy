@@ -95,8 +95,8 @@ def search_book():
 
     # adding default url image to each book
     default_image_url = url_for('static', filename='images/default.png')
-    search_result = [{**book, 'default_image_url': default_image_url} for book
-                     in search_result]
+    return jsonify(
+        {'books': search_result, 'default_image_url': default_image_url})
 
     return jsonify(search_result)
 
