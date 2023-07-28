@@ -13,7 +13,7 @@ def home():
     all_books = db.session.query(Book).join(Book.author)
     return render_template('home.html', books=all_books)
 
-@app.route('/add_author', methods=['GET','POST'])
+@app.route('/author/add', methods=['GET','POST'])
 def add_author():
     if request.method == 'GET':
         return render_template('add_author.html')
@@ -43,7 +43,7 @@ def add_author():
         return jsonify({"message": "Author added successfully"}), 201
 
 
-@app.route('/add_book', methods=['GET', 'POST'])
+@app.route('/book/add', methods=['GET', 'POST'])
 def add_book():
     """Handling GET and POST request
         GET - render a page with add book FORM.
@@ -82,28 +82,18 @@ def add_book():
     except Exception as e:
         return jsonify({"error": f"An unexpected error occurred - {e}"}), 500
 
+@app.route('/search')
+def main_search_page():
+    return render_template('search.html')
 
-@app.route('/search_book')
+
+
+@app.route('/book/search')
 def search_book():
     book_name_to_search = request.args.get('search', default="", type=str)
     search_result = search_for_book_by_name(book_name_to_search)
-    if 'error' in search_result:
-        if search_result['error'] == "We're having trouble reaching the book database. Please try again later.":
-            abort(503, description=search_result['error'])
-        elif search_result['error'] == "We received an unexpected response while trying to find your book. Please try again later." or search_result['error'] == "An unexpected error occurred. Please try again later.":
-            abort(500, description=search_result['error'])
-
-    # adding default url image to each book
     default_image_url = url_for('static', filename='images/default.png')
-    return jsonify(
-        {'books': search_result, 'default_image_url': default_image_url})
-
-    return jsonify(search_result)
+    return jsonify({'books': search_result, 'default_image_url': default_image_url})
 
 
-@app.errorhandler(HTTPException)
-def handle_exception(e):
-    response = e.get_response()
-    response.data = jsonify({"code": e.code, "name": e.name, "description": e.description})
-    response.content_type = "application/json"
-    return response
+

@@ -7,14 +7,14 @@ body {
 
 .search-container {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
+    flex-wrap: wrap;
 }
 
-.search-container form {
-    width: 100%;
-    max-width: 600px;
+.search-option {
+    width: 45%;
+    max-width: 400px;
     padding: 20px;
 }
 
@@ -59,11 +59,8 @@ body {
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
 }
 
-
-
 .book-image {
     width: 40%;
-
     object-fit: cover;
     border-radius: 4px;
 }

@@ -24,16 +24,36 @@ document.getElementById('searchMovieForm').addEventListener('submit', function(e
                 bookDiv.classList.add('book');
 
                 bookDiv.innerHTML = `
-                    <img src="${book.default_image_url || data.default_image_url}" alt="${book.title}" class="book-image" />
+                    <img src="https://covers.openlibrary.org/b/isbn/${book.isbn}-S.jpg" alt="${book.default_image_url}" class="book-image" />
                     <div class="book-details">
                         <h2>${book.title}</h2>
                         <p><strong>ISBN:</strong> ${book.isbn}</p>
                         <p><strong>Author:</strong> ${book.author}</p>
                         <p><strong>Publication Year:</strong> ${book.publication_year}</p>
+                        <button class="add-book-btn" data-book-id="${book.id}">Add Book</button>
                     </div>
                 `;
 
                 resultsContainer.appendChild(bookDiv);
+            });
+
+            document.querySelectorAll('.add-book-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    let bookId = this.dataset.bookId;
+
+                    fetch('book/add', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ bookId: bookId }),
+                    })
+                    .then(response => response.json())
+                    .then(data => console.log(data))
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+                });
             });
         })
         .catch(error => {

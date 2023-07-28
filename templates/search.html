@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}">
+    <title>Book Search</title>
+</head>
+<body>
+    <div class="search-container">
+        <div class="search-option">
+            <form id="searchAuthorForm" data-url="{{ url_for('add_author') }}">
+                <input type="text" id="authorSearch" name="authorSearch" placeholder="Enter author name..." required>
+                <button type="submit">Search for Author</button>
+            </form>
+        </div>
+
+        <div class="search-option">
+            <form id="searchBookForm" data-url="{{ url_for('search_book') }}">
+                <input type="text" id="bookSearch" name="bookSearch" placeholder="Enter book title..." required>
+                <button type="submit">Search for Book</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="results-container" id="resultsContainer">
+        <!-- Search results will be displayed here -->
+    </div>
+
+    <script src="{{ url_for('static', filename='add_book.js') }}"></script>
+</body>
+</html>
