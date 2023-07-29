@@ -1,82 +1,71 @@
-from flask import Flask, request, url_for, render_template, jsonify
-from flask_sqlalchemy import SQLAlchemy
+from flask import request, url_for, render_template, jsonify
+from data_managers import db_manager
 from my_app import app, db
-from my_app.data_models import Author, Book
-from datetime import datetime
-from sqlalchemy.exc import IntegrityError
 
 
 @app.route('/')
 def home():
-    all_books = db.session.query(Book).join(Book.author)
-    return render_template('home.html', books=all_books)
+    sorted_by = request.args.get('sorted_by')
+    allowed_sorts = ["author", "title", "publication_year"]
 
+    if sorted_by in allowed_sorts:
+        all_books = db_manager.get_books_sorted_by(db.session, sorted_by)
+    else:
+        all_books = db_manager.get_all_books_from_db(db.session)
+
+    return render_template('home.html', books=all_books)
 @app.route('/add_author', methods=['GET','POST'])
 def add_author():
+    """
+    Handle GET and POST requests for adding an author.
+
+    GET: Render an add_author HTML page.
+    POST: Validate the request data and add an author to the database.
+    Return a success message upon successful addition or an error message otherwise.
+    """
     if request.method == 'GET':
         return render_template('add_author.html')
     elif request.method == 'POST':
+        # get data from request
         name = request.form.get('name')
-        birthdate_str = request.form.get('birthdate')
-        deathdate_str = request.form.get('deathdate')
+        birth_date = request.form.get('birthdate')
+        death_date = request.form.get('deathdate')
+        try:
+            db_manager.add_author_to_db(db.session, name, birth_date, death_date)
+            return jsonify({"message": "Author added successfully"}), 201
+        except ValueError as ve:
+            return jsonify({"error": str(ve)}), 400
+        except Exception as e:
+            return jsonify({"error": "An error occurred while adding the author: " + str(e)}), 500
 
-        # Convert birthdate_str and deathdate_str to datetime objects
-        birthdate = datetime.strptime(birthdate_str,
-                                      '%Y-%m-%d') if birthdate_str else None
-        deathdate = datetime.strptime(deathdate_str,
-                                      '%Y-%m-%d') if deathdate_str else None
-
-        # Data validation
-        if birthdate and deathdate and deathdate < birthdate:
-            return jsonify({"error": "Deathdate cannot be before birthdate"}), 400
-        if deathdate and not birthdate:
-            return jsonify({"error": "Birthdate is required if deathdate is provided"}), 400
-
-        # Create a new author and add it to the database
-        new_author = Author(name=name, birth_date=birthdate, date_of_death=deathdate)
-        db.session.add(new_author)
-        db.session.commit()
-
-        # Return a success message
-        return jsonify({"message": "Author added successfully"}), 201
 
 @app.route('/add_book', methods=['GET', 'POST'])
 def add_book():
-    """Handling GET and POST request
-        GET - render a page with add book FORM.
-        POST - Getting arguments and adding the book to the db.
+    """
+    Handle GET and POST requests for adding a book.
+
+    GET: Render an add_book HTML page with all authors.
+    POST: Validate the request data and add a book to the database.
+    Return a success message upon successful addition or an error message otherwise.
     """
     try:
         if request.method == 'GET':
-            all_authors = db.session.query(Author).all()
+            all_authors = db_manager.get_all_authors(db.session)
             return render_template('add_book.html', authors=all_authors)
 
         elif request.method == 'POST':
-            # getting arguments from add book form
+            # getting arguments from request
             title = request.form.get('title')
             author_id = request.form.get('author')
             isbn = request.form.get('isbn')
-            publication_year = request.form.get('publication_year')  # Correct the form field name
+            publication_year = request.form.get('publication_year')
 
-            # Data validation
-            if not title or not author_id or not publication_year or not isbn:
-                return jsonify({"error": "All fields are required"}), 400
-            if not publication_year.isnumeric():
-                return jsonify({"error": "Invalid publication year"}), 400
-
-            # Create a new book and add it to the database
-            new_book = Book(isbn=isbn, title=title, publication_year=int(publication_year), author_id=author_id)
-            db.session.add(new_book)
-            db.session.commit()
-
-            # Return a success message
+            db_manager.add_book_to_db(db.session, title, author_id, isbn, publication_year)
             return jsonify({"message": "Book added successfully"}), 201
-
-    except IntegrityError:
-        db.session.rollback()
-        return jsonify({"error": "Book with this ISBN already exists"}), 400
-
+    except ValueError as ve:
+        return jsonify({"error": str(ve)}), 400
     except Exception as e:
-        return jsonify({"error": f"An unexpected error occurred - {e}"}), 500
+        return jsonify({"error": "An error occurred while adding the book: " + str(e)}), 500
+
 
 

@@ -1,6 +1,5 @@
 from my_app import db
 
-
 class Author(db.Model):
     __tablename__ = 'authors'
     id = db.Column(db.Integer, primary_key=True)
@@ -25,6 +24,7 @@ class Book(db.Model):
     isbn = db.Column(db.String(20), nullable=False, unique=True)
     title = db.Column(db.String(200), nullable=False)
     publication_year = db.Column(db.Integer, nullable=False)
+    cover = db.Column(db.String(200), nullable=True)
 
     # foreign key
     author_id = db.Column(db.Integer, db.ForeignKey('authors.id'),
