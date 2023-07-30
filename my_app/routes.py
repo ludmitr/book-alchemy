@@ -5,7 +5,7 @@ from my_app import app, db
 
 @app.route('/')
 def home():
-    sorted_by = request.args.get('sorted_by')
+    sorted_by = request.args.get('sort')
     search_criteria = request.args.get('search')
 
     allowed_sorts = ["author", "title", "publication_year"]
@@ -21,6 +21,7 @@ def home():
     if search_criteria:
         message = f"Search results for: {search_criteria} " if all_books else f'No matches for: {search_criteria} '
         return render_template('home.html', books=all_books, message=message)
+
 
     return render_template('home.html', books=all_books)
 

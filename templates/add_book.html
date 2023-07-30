@@ -7,6 +7,7 @@
     <title>Add Book</title>
 </head>
 <body>
+<a class="btn btn-reset home-btn" href="{{ url_for('home') }}">Home</a>
     <div class="container">
         <form id="addBookForm" action="{{ url_for('add_book') }}" method="POST">
             <h2>Add Book</h2>

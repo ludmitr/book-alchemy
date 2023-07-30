@@ -155,3 +155,28 @@ select:focus {
         background-image: none;
     }
 }
+
+/* Home Button */
+.home-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+.btn-reset {
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #333;
+}
+
+.btn-reset:hover {
+    background-color: #333;
+    color: #fff;
+}
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    transition: 0.3s ease-in-out;
+}

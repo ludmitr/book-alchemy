@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-    let resetButton = document.querySelector('.reset-button');
-    let baseURL = resetButton.getAttribute('href');
+    let sortSelect = document.getElementById('sort');
 
-    document.getElementById('sort').addEventListener('change', function() {
+    sortSelect.addEventListener('change', function() {
         if (this.value) {
-            window.location = baseURL + "?sorted_by=" + this.value;
+            let currentUrl = window.location.href.split('?')[0];
+            window.location = currentUrl + "?sort=" + this.value;
         }
     });
 });

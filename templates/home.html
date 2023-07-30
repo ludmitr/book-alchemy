@@ -1,51 +1,74 @@
+<!DOCTYPE html>
 <html>
 <head>
     <title>My Library App</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
 </head>
 <body>
-    <div class="container">
-        <div class="top-left-button">
-            <form action="{{ url_for('restore_db') }}" method="post">
-                <button type="submit">Restore Default Data</button>
-            </form>
-        </div>
-        <h1>Welcome to My Library</h1>
-        <div class="top-container">
-            <div class="sort-container">
-                <select id="sort" name="sort">
-                    <option value="">Sort By</option>
-                    <option value="author">Author</option>
-                    <option value="title">Title</option>
-                    <option value="publication_year">Publish Year</option>
-                </select>
-            </div>
-            <div class="reset-container">
-                <a class="reset-button" href="{{ url_for('home') }}">Reset</a>
-            </div>
-            <form class="search-container" action="{{ url_for('home') }}" method="get">
-                <input type="text" name="search" class="search-input" placeholder="Search...">
-                <button type="submit" class="search-button">Search</button>
-            </form>
-        </div>
-        {% if message %}
-            <p class="server-message">{{ message }}</p>
-        {% endif %}
-        <div class="book-shelf">
-            {% for book in books %}
-                <div class="book-card">
-                    <div class="book-cover" style="background-image: url({{ book.cover or url_for('static', filename='images/default.png') }});" alt="Book cover for {{ book.title }}"></div>
-                    <div class="book-info">
-                        <h2 class="book-title">{{ book.title }}</h2>
-                        <p class="book-author">By {{ book.author.name }}</p>
-                        <form class="delete-form" action="{{ url_for('delete_book', book_id=book.id) }}" method="post">
-                            <button type="submit" class="delete-button">Delete</button>
-                        </form>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
+<div class="container">
+    <!-- Header -->
+    <header class="header">
+    <div class="header-btn-group">
+        <a class="btn btn-reset" href="{{ url_for('add_book') }}">Add Book</a>
+        <a class="btn btn-reset" href="{{ url_for('add_author') }}">Add Author</a>
     </div>
-    <script src="{{ url_for('static', filename='home.js') }}"></script>
+    <h1>Testing ETM/Flask/SQLALCHEMY</h1>
+
+    <form action="{{ url_for('restore_db') }}" method="post">
+        <button class="btn btn-danger" type="submit">Restore Default Data
+        </button>
+    </form>
+</header>
+
+    <!-- Controls -->
+    <section class="controls">
+        <div class="sort-container">
+            <select id="sort" name="sort" class="form-control">
+                <option value="">Sort By</option>
+                <option value="author">Author</option>
+                <option value="title">Title</option>
+                <option value="publication_year">Publish Year</option>
+            </select>
+        </div>
+        <a class="btn btn-reset" href="{{ url_for('home') }}">Reset</a>
+        <form class="search-container" action="{{ url_for('home') }}"
+              method="get">
+            <input type="text" name="search" class="search-input form-control"
+                   placeholder="Search...">
+            <button type="submit" class="btn btn-search">Search</button>
+        </form>
+    </section>
+
+    <!-- Messages -->
+    {% if message %}
+    <p class="server-message">{{ message }}</p>
+    {% endif %}
+
+    <!-- Book Shelf -->
+    <div class="book-shelf">
+        {% for book in books %}
+        <div class="book-card">
+            <div class="book-cover {% if book.cover is none %}default-cover{% endif %}"
+                 style="background-image: url({{ book.cover or url_for('static', filename='images/default.png') }});"
+                 alt="Book cover for {{ book.title }}"></div>
+
+            <div class="book-info">
+                <h2 class="book-title">{{ book.title }}</h2>
+                <p class="book-author">By {{ book.author.name }}</p>
+                <p class="book-year">Published in {{ book.publication_year
+                    }}</p>
+            </div>
+            <form class="delete-form"
+                  action="{{ url_for('delete_book', book_id=book.id) }}"
+                  method="post">
+                <button type="submit" class="delete-button btn btn-danger">
+                    Delete
+                </button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<script src="{{ url_for('static', filename='home.js') }}"></script>
 </body>
 </html>

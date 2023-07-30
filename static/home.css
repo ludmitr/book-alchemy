@@ -1,47 +1,107 @@
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f9f9f9;
-    margin: 0;
-    padding: 0;
 }
 
 .container {
     max-width: 1200px;
-    margin: 0 auto;
-    background-color: #f9f9f9;
+    margin: 20px auto;
+    padding: 0 15px;
 }
 
-h1 {
-    text-align: center;
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
+}
+
+.header h1 {
     color: #333;
 }
 
-.top-container {
+/* Controls */
+.controls {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
 }
 
 .sort-container select,
-.search-container .search-button,
 .search-container .search-input {
-    padding: 5px 10px;
-    font-size: 1.2em;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.search-container {
-    display: flex;
-    align-items: center;
-}
-
-.search-input {
+    flex: 1;
     margin-right: 10px;
 }
 
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    transition: 0.3s ease-in-out;
+}
+
+.btn-danger {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #aa2e25;
+}
+
+/* Header Buttons */
+.header-btn-group {
+    display: flex;
+    gap: 10px; /* Space between buttons */
+}
+
+
+.btn-reset {
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #333;
+}
+
+.btn-reset:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+.btn-search {
+    background-color: #008CBA;
+    color: white;
+}
+
+.btn-search:hover {
+    background-color: #005f8d;
+}
+
+/* Form Controls */
+.form-control {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Server Message */
+.server-message {
+    color: red;
+    margin-bottom: 20px;
+}
+
+/* Book Shelf */
 .book-shelf {
     display: flex;
     flex-wrap: wrap;
@@ -54,9 +114,9 @@ h1 {
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
     display: flex;
     flex-direction: column;
+    justify-content: space-between; /* Added this line */
     transition: 0.3s ease-in-out;
 }
 
@@ -73,6 +133,10 @@ h1 {
     background-repeat: no-repeat;
     background-size: cover;
 }
+.default-cover {
+    background-position: center !important;
+    background-size: contain !important;
+}
 
 .book-info {
     padding: 20px;
@@ -88,39 +152,11 @@ h1 {
     font-style: italic;
 }
 
-
-/*reset button*/
-.reset-container {
-    display: inline-block;
-    margin: 0 20px;
+.book-year {
+    color: #999;
+    font-size: 0.9em;
 }
 
-.reset-button {
-    display: inline-block;
-    background-color: #f44336;  /* Red background */
-    color: white;
-    padding: 10px 24px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 12px;
-    text-decoration: none;
-    transition-duration: 0.4s;
-    overflow: hidden;
-    border: none;
-
-.reset-button:hover {
-    background-color: #aa2e25;
-}
-
-.search-button {
-    background-color: #008CBA;
-    color: white;
-    padding: 10px 24px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 12px;
-    text-decoration: none;
-    transition-duration: 0.4s;
-    overflow: hidden;
-    border: none;
+.delete-form {
+    padding: 0 20px 20px; /* Added this line to match padding with .book-info */
 }
