@@ -3,7 +3,6 @@ from datetime import datetime
 from data_managers.books_api_data_handler import get_book_cover
 from sqlalchemy import func
 import config
-import os
 import shutil
 
 
