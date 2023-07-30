@@ -6,15 +6,26 @@ from my_app import app, db
 @app.route('/')
 def home():
     sorted_by = request.args.get('sorted_by')
+    search_criteria = request.args.get('search')
+
     allowed_sorts = ["author", "title", "publication_year"]
 
+    # getting data according to request
     if sorted_by in allowed_sorts:
         all_books = db_manager.get_books_sorted_by(db.session, sorted_by)
+    elif search_criteria:
+        all_books = db_manager.get_books_by_search_term(db.session, search_criteria)
     else:
         all_books = db_manager.get_all_books_from_db(db.session)
 
+    if search_criteria:
+        message = f"Search results for: {search_criteria} " if all_books else f'No matches for: {search_criteria} '
+        return render_template('home.html', books=all_books, message=message)
+
     return render_template('home.html', books=all_books)
-@app.route('/add_author', methods=['GET','POST'])
+
+
+@app.route('/add_author', methods=['GET', 'POST'])
 def add_author():
     """
     Handle GET and POST requests for adding an author.
@@ -67,5 +78,21 @@ def add_book():
     except Exception as e:
         return jsonify({"error": "An error occurred while adding the book: " + str(e)}), 500
 
+@app.route('/book/<int:book_id>/delete', methods=['POST'])
+def delete_book(book_id):
+    """Delete book by passed id"""
+    book_name = db_manager.delete_book_by_id(db.session, book_id)
+    all_books = db_manager.get_all_books_from_db(db.session)
+
+    message_for_user = f"'{book_name}' - deleted successfully." if book_name else 'An error occurred, the book was not deleted.'
+    return render_template('home.html', books=all_books, message=message_for_user)
 
 
+@app.route('/book/restore', methods=['POST'])
+def restore_db():
+    db.session.remove()  # This will close the session
+    db.engine.dispose()  # This will close the engine
+    db_manager.restore_db_to_default()
+    message_for_user = 'Database RESTORED!'
+    all_books = db_manager.get_all_books_from_db(db.session)
+    return render_template('home.html', books=all_books, message=message_for_user)

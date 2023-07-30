@@ -1,6 +1,11 @@
 from my_app.data_models import Author, Book
 from datetime import datetime
 from data_managers.books_api_data_handler import get_book_cover
+from sqlalchemy import func
+import config
+import os
+import shutil
+
 
 def get_all_authors(session):
     return session.query(Author).all()
@@ -56,3 +61,24 @@ def get_books_sorted_by(session, sorted_by):
                 "publication_year": Book.publication_year}
     sorted_books = session.query(Book).join(Book.author).order_by(sort_map[sorted_by]).all()
     return sorted_books
+
+
+def get_books_by_search_term(session, search_text: str):
+    search_result = session.query(Book).join(Book.author)\
+        .filter(func.lower(Book.title).contains(search_text.lower())).all()
+    return search_result
+
+
+def delete_book_by_id(session, book_id: int):
+    """Delete book by book id. If deleted  - return book title, if not - returns None"""
+    book_to_delete = session.query(Book).filter(Book.id == book_id).first()
+    if book_to_delete is not None:
+        session.delete(book_to_delete)
+        session.commit()
+        return book_to_delete.title
+
+    return None
+
+
+def restore_db_to_default():
+    shutil.copy(config.get_absolute_path_default_db(), config.get_absolute_path_current_db())

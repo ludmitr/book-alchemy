@@ -3,3 +3,4 @@ document.getElementById('sort').addEventListener('change', function() {
         window.location = window.location.pathname + "?sorted_by=" + this.value;
     }
 });
+
