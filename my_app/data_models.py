@@ -1,6 +1,15 @@
+"""
+This module defines the Author and Book models, representing the respective entities in our application.
+The relationship between these models is one-to-many i.e., one author can write many books.
+"""
+
 from my_app import db
 
 class Author(db.Model):
+    """
+    The Author model represents an author entity with its corresponding details.
+    It has a one-to-many relationship with the Book model.
+    """
     __tablename__ = 'authors'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -19,6 +28,10 @@ class Author(db.Model):
 
 
 class Book(db.Model):
+    """
+    The Book model represents a book entity with its corresponding details.
+    It has a many-to-one relationship with the Author model.
+    """
     __tablename__ = 'books'
     id = db.Column(db.Integer, primary_key=True)
     isbn = db.Column(db.String(20), nullable=False, unique=True)

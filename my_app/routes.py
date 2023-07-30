@@ -1,10 +1,19 @@
-from flask import request, url_for, render_template, jsonify
+from flask import request, render_template, jsonify
 from data_managers import db_manager
 from my_app import app, db
 
 
 @app.route('/')
 def home():
+    """
+    Handles the main page of the library app.
+    Depending on the request arguments, it may display all books, sorted books, or books matching search criteria.
+    If no specific arguments are provided, it returns all books from the database.
+
+    Returns:
+       Rendered home.html template with the list of relevant books.
+       If a search is performed, the template also includes a message indicating the search results.
+    """
     sorted_by = request.args.get('sort')
     search_criteria = request.args.get('search')
 
@@ -21,7 +30,6 @@ def home():
     if search_criteria:
         message = f"Search results for: {search_criteria} " if all_books else f'No matches for: {search_criteria} '
         return render_template('home.html', books=all_books, message=message)
-
 
     return render_template('home.html', books=all_books)
 
@@ -81,7 +89,13 @@ def add_book():
 
 @app.route('/book/<int:book_id>/delete', methods=['POST'])
 def delete_book(book_id):
-    """Delete book by passed id"""
+    """
+    Handles the request to delete a book from the library by its id.
+    This function deletes book by its id from db, and returns all remaining books with a message of deleted book.
+
+    Returns:
+        Rendered home.html template with the list of remaining books and a message indicating the result of the deletion attempt.
+    """
     book_name = db_manager.delete_book_by_id(db.session, book_id)
     all_books = db_manager.get_all_books_from_db(db.session)
 
@@ -91,6 +105,14 @@ def delete_book(book_id):
 
 @app.route('/book/restore', methods=['POST'])
 def restore_db():
+    """
+    Handles the request to restore the database to its default state.
+    This function closes the current database session and engine, then calls a function to restore the database.
+    After restoration, it retrieves all books from the database for display.
+
+    Returns:
+        Rendered home.html template with the list of all books from the restored database and a message indicating the database has been restored.
+    """
     db.session.remove()  # This will close the session
     db.engine.dispose()  # This will close the engine
     db_manager.restore_db_to_default()

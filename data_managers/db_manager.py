@@ -10,6 +10,19 @@ def get_all_authors(session):
     return session.query(Author).all()
 
 def add_author_to_db(session, name: str, birth_date: str, death_date: str):
+    """
+    Adds a new author to the database, validating the data before committing.
+
+    Parameters:
+        session (Session): SQLAlchemy Session object.
+        name (str): Name of the author.
+        birth_date (str): Author's birth date in 'YYYY-MM-DD' format.
+        death_date (str): Author's death date in 'YYYY-MM-DD' format.
+
+    Raises:
+        ValueError: If the birth or death date is invalid or the author's name
+        already exists in the database.
+    """
     # Convert birthdate_str and deathdate_str to datetime objects
     birth_date = datetime.strptime(birth_date, '%Y-%m-%d') if birth_date else None
     death_date = datetime.strptime(death_date, '%Y-%m-%d') if death_date else None
@@ -30,16 +43,18 @@ def add_author_to_db(session, name: str, birth_date: str, death_date: str):
 
 
 def add_book_to_db(session, title, author_id, isbn, publication_year):
+    """
+    Validates input data and adds a new book to the database.
+    Raises ValueError if data is invalid or if a book with the same title or ISBN already exists.
+    """
     # Data validation
     if not title or not author_id or not publication_year or not isbn:
         raise ValueError("All fields are required")
     if not publication_year.isnumeric():
         raise ValueError("Invalid publication year")
-
     existing_book_with_same_title = session.query(Book).filter(Book.title == title).first()
     if existing_book_with_same_title is not None:
         raise ValueError("A book with this title already exists")
-
     existing_book_with_same_isbn = session.query(Book).filter(Book.isbn == isbn).first()
     if existing_book_with_same_isbn is not None:
         raise ValueError("A book with this isbn already exists")
@@ -55,6 +70,14 @@ def get_all_books_from_db(session):
     return session.query(Book).join(Book.author).all()
 
 def get_books_sorted_by(session, sorted_by):
+    """
+    This function retrieves all books from the database, sorted by the specified field.
+    Parameters:
+        session (Session): SQLAlchemy Session object.
+        sorted_by (str): Field by which to sort the list of books. Can be "author", "title", or "publication_year".
+    Returns:
+        list: A list of Book objects, sorted by the specified field.
+    """
     sort_map = {"author": Author.name,
                 "title": Book.title,
                 "publication_year": Book.publication_year}
@@ -68,7 +91,7 @@ def get_books_by_search_term(session, search_text: str):
     return search_result
 
 
-def delete_book_by_id(session, book_id: int):
+def delete_book_by_id(session, book_id: int) -> str:
     """Delete book by book id. If deleted  - return book title, if not - returns None"""
     book_to_delete = session.query(Book).filter(Book.id == book_id).first()
     if book_to_delete is not None:
@@ -80,4 +103,5 @@ def delete_book_by_id(session, book_id: int):
 
 
 def restore_db_to_default():
+    """Replace current sqlite db with default one """
     shutil.copy(config.get_absolute_path_default_db(), config.get_absolute_path_current_db())
