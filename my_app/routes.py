@@ -119,3 +119,8 @@ def restore_db():
     message_for_user = 'Database RESTORED!'
     all_books = db_manager.get_all_books_from_db(db.session)
     return render_template('home.html', books=all_books, message=message_for_user)
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
