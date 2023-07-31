@@ -30,7 +30,8 @@
                 <option value="publication_year">Publish Year</option>
             </select>
         </div>
-        <a class="btn btn-reset" href="{{ url_for('home') }}">Reset</a>
+        <a class="btn btn-reset" id="resetBtn" href="{{ url_for('home') }}">Reset</a>
+
         <form class="search-container" action="{{ url_for('home') }}"
               method="get">
             <input type="text" name="search" class="search-input form-control"
